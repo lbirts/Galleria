@@ -1,0 +1,4 @@
+/config/credentials.yml.enc
+/config/credentials/development.key
+/config/master.key
+/config/initializers/cloudinary.rb
