@@ -3,9 +3,9 @@
 Galleria is an art gallery app that allows artists to upload pictures of their work and sell them.
  Features:
  - Search pictures (from a list of tags)
-    - Securely add pictures (bulk and individual) with public and private permissions
-    - Secure deletion of pictures (one by one)
-    - Manage inventory and set prices
+ - Securely add pictures (bulk and individual) with public and private permissions
+ - Secure deletion of pictures (one by one)
+ - Manage inventory and set prices
 
 ## How to install and use
 
@@ -15,12 +15,10 @@ Clone down this repo. Cd into the api folder and bundle install to install all t
 
 ### Things to improve upon:
 
-   -Overall user experience
-   
-     -Design
-     
-   -Securely handle money through the site
-   -Use google's vision api to search characteristics of images as well
+ - Overall user experience
+     -Design 
+ - Securely handle money through the site
+ - Use google's vision api to search characteristics of images as well
 
 ### Project Status
 
