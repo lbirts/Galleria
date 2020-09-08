@@ -15,7 +15,7 @@ Clone down this repo. Cd into the api folder and bundle install to install all t
 
 ### Things to improve upon:
    -Overall user experience
-      -Design
+     -Design
    -Securely handle money through the site
    -Use google's vision api to search characteristics of images as well
 
