@@ -19,6 +19,9 @@ function Product(props) {
         if (props.item) {
             setMainImage(props.item.images[0])
             setImages(props.item.images)
+        } else {
+            setImages(findProduct().images)
+            setMainImage(findProduct().images[0])
         }
     }, [props.item])
 
@@ -98,7 +101,7 @@ function Product(props) {
                 <Grid.Row>
                     <Grid.Column width={12}>
                     <div className="main-img">
-                        <img src={props.item.images[0].url} alt={mainImage.id}/>
+                        <img src={findProduct().images[0].url} alt={mainImage.id}/>
                     </div>
                     <div className="images">
                         {images.map(img =>  
@@ -110,7 +113,7 @@ function Product(props) {
                         <div className="info">
                             <h2>{findProduct().name}</h2>
                             <p className="whole"><span className="words">Price: </span><span className="price">{findProduct().discount > 0 ? `$${new Intl.NumberFormat().format(findProduct().price - ((findProduct().discount / 100) * findProduct().price))}` : `$${new Intl.NumberFormat().format(findProduct().price)}`}</span></p>
-                            {findProduct().discount > 0 ? <p><span className="strikethrough">{new Intl.NumberFormat().format(findProduct().price)}</span><span>{`(${findProduct().discount}% off)`}</span></p> : null}
+                            {findProduct().discount > 0 ? <p><span className="strikethrough">${new Intl.NumberFormat().format(findProduct().price)}</span><span>{`(${findProduct().discount}% off)`}</span></p> : null}
                             <button onClick={buyNow} className="buy">Buy Now</button>
                             <button onClick={addCart} className="add">Add to Cart</button>
                             {findProduct().buyer_id ? <h2>SOLD</h2> : null}

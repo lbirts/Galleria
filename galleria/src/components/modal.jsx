@@ -9,10 +9,11 @@ function LoginModal(props) {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [passwordConfirmation, setPasswordConfirmation] = useState("")
+    let token = localStorage.getItem("token")
 
     useEffect(() => {
         setOpen(isLoggedIn())
-    }, [localStorage.getItem("token")])
+    }, [token])
 
     const isLoggedIn = () => {
         if (localStorage.getItem("token")) {

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Segment, Button, Form, Image } from 'semantic-ui-react'
-import ItemCard from '../components/itemcard';
+import ItemCard from "../components/itemcard";
 import {Link, withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
 import {loginUser, logoutUser} from '../redux/actions/actions'
@@ -19,7 +19,7 @@ function Profile(props) {
             setEmail(props.user.email)
             setBio(props.user.bio)
         }
-    }, [props.items])
+    }, [props.items, props.user])
 
     const handleSubmit = () => {
         const options = {
@@ -95,7 +95,7 @@ function Profile(props) {
                 <h3 style={{marginBottom: "50px"}}>Inventory</h3>
                 <Grid>
                 {props.user.inventory.length === 0 ? <p style={{marginLeft: "auto", marginRight: "auto"}}>You haven't uploaded anything yet</p> : props.user.inventory.map(item => (
-                    <ItemCard key={item.id} item={item}/>
+                    <ItemCard key={item.id} itm={item}/>
                 ))}
                 </Grid>
                 </div>
@@ -107,7 +107,7 @@ function Profile(props) {
                     <p style={{marginLeft: "auto", marginBottom: "30px", marginRight: "auto"}}>You haven't bought anything yet</p> 
                     : 
                     props.user.bought.map(item => (
-                        <ItemCard key={item.id} item={item}/>
+                        <ItemCard key={item.id} itm={item}/>
                     ))
                 }
                 </Grid>

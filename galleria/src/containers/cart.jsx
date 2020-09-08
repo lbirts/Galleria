@@ -5,12 +5,12 @@ import { withRouter } from 'react-router-dom'
 import { getUsers, getItems, getImages, loginUser } from '../redux/actions/actions'
 
 function Cart(props) {
-    const [products, setProducts] = useState([])
+    // const [products, setProducts] = useState([])
     const [total, setTotal] = useState(0)
 
     useEffect(() => { 
         if (props.items) {
-            setProducts(localStorage.getItem("cart"))
+            // setProducts(localStorage.getItem("cart"))
             if (localStorage.getItem("cart")) {
                 let adding = 0
                 localStorage.getItem("cart").split(" ").map(numb => (
@@ -31,7 +31,7 @@ function Cart(props) {
         let index = localStorage.getItem("cart").split(" ").indexOf(numb)
         let newCart = localStorage.getItem("cart").split(" ").splice(index, 1)
         localStorage.setItem("cart", newCart)
-        setProducts(localStorage.getItem("cart"))
+        // setProducts(localStorage.getItem("cart"))
 
     }
 

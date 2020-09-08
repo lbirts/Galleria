@@ -40,7 +40,7 @@ function Home(props) {
             </div>
             <Grid>
             {filteredItems.map(item => (
-                <ItemCard key={item.id} item={item}/>
+                <ItemCard key={item.id} itm={item} imgs={props.images}/>
             ))}
             </Grid>
         </div>
@@ -50,7 +50,8 @@ function Home(props) {
 
 const mapStateToProps = (state) => {
     return {
-      items: state.items.items
+      items: state.items.items,
+      images: state.images
     }
 }
   

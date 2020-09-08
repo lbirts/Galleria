@@ -59,12 +59,11 @@ function SellerProduct(props) {
     }
 
     const findSeller = () => {
-        debugger
         if (props.item) {
-            let seller = props.users.find(user => user.id === props.item.seller_id)
+            let seller = props.users.find(user => user.id == props.item.seller_id)
             return seller
         } else {
-            let seller = props.users.find(user => user.id === findProduct().seller_id)
+            let seller = props.users.find(user => user.id == findProduct().seller_id)
             return seller
         }
     }
@@ -175,17 +174,17 @@ function SellerProduct(props) {
                     </Grid.Column>
                     <Grid.Column>
                         <div className="info">
-                            <label for="name">Name: </label>
+                            <label htmlFor="name">Name: </label>
                             <br/>
                             <input type="text" className="inputChange" value={name} name="name" onChange={(e) => setName(e.target.value)}/>
                             <br/>
-                            <label for="price">Price: </label>
+                            <label htmlFor="price">Price: </label>
                             <br/>
                             <input type="number" className="inputChange" value={price} name="price" onChange={(e) => setPrice(e.target.value)}/>
-                            <label for="discount">Discount: </label>
+                            <label htmlFor="discount">Discount: </label>
                             <input type="number" className="inputChange" value={discount} name="discount" onChange={(e) => setDiscount(e.target.value)}/>
                             <br/>
-                            <label for="public">Public:</label>
+                            <label htmlFor="public">Public:</label>
                             <br/>
                             <input type="checkbox" className="check" checked={pub} name="public" onChange={(e) => setPub(e.target.checked)}/>
                         </div>
@@ -202,9 +201,9 @@ function SellerProduct(props) {
                         Description
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 0}>
-                        <textarea classname="areaChange" value={description} onChange={(e) => setDescription(e.target.value)} name="description"/>
+                        <textarea className="areaChange" value={description} onChange={(e) => setDescription(e.target.value)} name="description"/>
                     </Accordion.Content>
-                    {/* <Accordion.Title
+                    <Accordion.Title
                         active={activeIndex === 1}
                         index={1}
                         onClick={handleAccordion}
@@ -214,7 +213,7 @@ function SellerProduct(props) {
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 1}>
                         <p>{findSeller().bio}</p>
-                    </Accordion.Content> */}
+                    </Accordion.Content>
                     <Accordion.Title
                         active={activeIndex === 2}
                         index={2}
@@ -224,7 +223,7 @@ function SellerProduct(props) {
                         Tags
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 2}>
-                        <textarea classname="inputChange" value={tags} onChange={(e) => setTags(e.target.value)} name="tags"/>
+                        <textarea className="inputChange" value={tags} onChange={(e) => setTags(e.target.value)} name="tags"/>
                     </Accordion.Content>
                 </Accordion>
                 </Grid.Row>
@@ -250,7 +249,7 @@ const mapDispatchToProps = dispatch => ({
     deleteImage: image => dispatch(deleteImage(image)),
     updateItem: item => dispatch(updateItem(item)),
     getItems: items => dispatch(getItems(items)),
-    getImages: images => dispatch(getItems(images)),
+    getImages: images => dispatch(getImages(images)),
     loginUser: user => dispatch(loginUser(user)),
     selectItem: item => dispatch(selectItem(item))
 
