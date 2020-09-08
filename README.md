@@ -2,10 +2,10 @@
 
 Galleria is an art gallery app that allows artists to upload pictures of their work and sell them.
  Features:
- *Search pictures (from a list of tags)
-    -Securely add pictures (bulk and individual) with public and private permissions
-    -Secure deletion of pictures (one by one)
-    -Manage inventory and set prices
+    - Search pictures (from a list of tags)
+    - Securely add pictures (bulk and individual) with public and private permissions
+    - Secure deletion of pictures (one by one)
+    - Manage inventory and set prices
 
 ## How to install and use
 
