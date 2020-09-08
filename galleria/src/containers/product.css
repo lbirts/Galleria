@@ -1,0 +1,103 @@
+.product {
+    padding-top: 50px;
+    position: relative;
+}
+
+.main-img .btnRight {
+    right: 26.55%;
+}
+
+.main-img .btnRight, .main-img .btnLeft {
+    position: absolute;
+    top: 40%;
+    height: 40px;
+    width: 30px;
+    cursor: pointer;
+}
+
+.main-img img {
+    width: 600px;
+    height: 500px;
+}
+
+.images {
+    padding-top: 20px
+}
+
+.images img {
+    width: 120px;
+    height: 100px;
+    cursor: pointer;
+}
+
+.accordion {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    width: 1100px !important;
+}
+
+.info {
+    padding-top: 100px;
+    width: 200px;
+    margin-left: -200px;
+}
+
+.words {
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.price {
+    font-weight: 900;
+    font-size: 25px;
+}
+
+.buy, .photos {
+    background-color: #00a005;
+    margin-top: 10px;
+}
+
+.buy, .add, .photos, .submit-btn {
+    border: 0;
+    width: 180px;
+    height: 45px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.add, .submit-btn {
+    margin-top: 20px;
+    background-color: #0053a0;
+}
+
+.submit-btn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 100px;
+}
+
+.x {
+    color: red;
+    position: absolute;
+    /* padding-bottom: 200px !important; */
+}
+
+.inputChange, textarea {
+    height: 30px;
+    border: 1px solid rgb(186, 186, 186);
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.info label {
+    padding-top: 20px;
+}
+
+textarea {
+    width: 500px !important;
+    height: 80px;
+}

@@ -1,0 +1,28 @@
+.menu-content {
+    background-color: #540d0d;
+}
+
+.menu-logo:hover, .menu-link:hover {
+    color: #2b0202;
+}
+
+.menu-logo  {
+    float: right;
+    color: white;
+    font-size: 30px;
+    font-weight: 600
+}
+
+.menu-links {
+    position: absolute;
+    right: 0px;
+}
+
+.menu-link {
+    float: left;
+    text-decoration: none;
+    color: white;
+    padding-right: 30px;
+    font-size: 17px;
+    font-weight: 600
+}
