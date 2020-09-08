@@ -1,6 +1,6 @@
 class Api::V1::ItemsController < ApplicationController
     before_action :set_item, only: [:show, :update, :destroy]
-    skip_before_action :logged_in?, only: [:index, :show, :update]
+    skip_before_action :logged_in?, only: [:index, :show]
   
   def index
     @items = Item.all
@@ -12,6 +12,7 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def create 
+    # byebug
     item = Item.new(item_params)
     if item.save
         render json: item
@@ -38,7 +39,7 @@ class Api::V1::ItemsController < ApplicationController
     end
 
     def item_params
-      params.require(:item).permit(:price, :discount, :tags, :public, :name)
+      params.require(:item).permit(:price, :discount, :tags, :public, :name, :description, :seller_id, :buyer_id)
     end
 
 end

@@ -2,6 +2,8 @@ import React, {useState, useEffect, useRef} from 'react';
 import { connect } from 'react-redux';
 import './product.css';
 import { Accordion, Icon, Grid } from 'semantic-ui-react'
+import {addImage, deleteImage, updateItem, getItems, getImages, loginUser, selectItem} from '../redux/actions/actions'
+import images from '../redux/reducers/images';
 
 function SellerProduct(props) {
     const [mainImage, setMainImage] = useState({})
@@ -22,14 +24,27 @@ function SellerProduct(props) {
 
     useEffect(() => {
         if (props.items) {
-            setMainImage(findProduct().images[0])
-            setImages(findProduct().images)
-            setName(findProduct().name)
-            setPrice(findProduct().price)
-            setDiscount(findProduct().discount)
-            setDescription(findProduct().description)
-            setTags(findProduct().tags)
-            setPub(findProduct().public)
+            if (props.item) {
+                setMainImage(props.item.images[0])
+                setImages(props.item.images)
+                setName(props.item.name)
+                setPrice(props.item.price)
+                setDiscount(props.item.discount)
+                setDescription(props.item.description)
+                setTags(props.item.tags)
+                setPub(props.item.public)
+            } else {
+                setMainImage(findProduct().images[0])
+                setImages(findProduct().images)
+                setName(findProduct().name)
+                setPrice(findProduct().price)
+                setDiscount(findProduct().discount)
+                setDescription(findProduct().description)
+                setTags(findProduct().tags)
+                setPub(findProduct().public)
+                props.selectItem(findProduct())
+            }
+            
         }
     }, [props.images])
 
@@ -44,8 +59,14 @@ function SellerProduct(props) {
     }
 
     const findSeller = () => {
-        let seller = props.users.find(user => user.id === findProduct().seller_id)
-        return seller
+        debugger
+        if (props.item) {
+            let seller = props.users.find(user => user.id === props.item.seller_id)
+            return seller
+        } else {
+            let seller = props.users.find(user => user.id === findProduct().seller_id)
+            return seller
+        }
     }
 
     const openUploader = () => {
@@ -61,14 +82,23 @@ function SellerProduct(props) {
             console.log(files[i]);
             let form = new FormData()
             form.append("image", files[i])
-            form.append("item_id", findProduct().id)
+            form.append("item_id", props.item.id)
             fetch("http://localhost:3000/api/v1/images", {
                 method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                },
                 body: form
             })
             .then(res => res.json())
             .then(newImg => {
-                setImages([...images, newImg])
+                props.addImage(newImg)
+                fetch("http://localhost:3000/api/v1/items/" + props.item.id)
+                .then(res => res.json())
+                .then((item) => {
+                    props.selectItem(item)
+                    setImages(props.item.images)
+                })
             })
         }
        
@@ -76,19 +106,31 @@ function SellerProduct(props) {
 
     const deletePic = (img) => {
         fetch("http://localhost:3000/api/v1/images/" + img.id, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
+            }
         })
         .then(() => {
-            setImages(images.filter(image => image.id !== img.id))
+            props.deleteImage(img)
+            setImages(props.item.images)
+            fetch("http://localhost:3000/api/v1/items/" + props.item.id)
+            .then(res => res.json())
+            .then((item) => {
+                props.selectItem(item)
+                setImages(props.item.images)
+            })
         })
     }
 
     const saveEdits = () => {
-        fetch("http://localhost:3000/api/v1/items/" + findProduct().id, {
+        fetch("http://localhost:3000/api/v1/items/" + props.item.id, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
-                "Accepts": "application/json"
+                "Accepts": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
             },
             body: JSON.stringify({
                 name: name,
@@ -101,7 +143,13 @@ function SellerProduct(props) {
         })
         .then(res => res.json())
         .then(editted => {
-            console.log(editted)
+            props.updateItem(editted)
+            props.selectItem(editted)
+            fetch("http://localhost:3000/api/v1/items")
+            .then(res => res.json())
+            .then(items => { 
+                props.getItems(items)
+            })
         })
     }
 
@@ -156,7 +204,7 @@ function SellerProduct(props) {
                     <Accordion.Content active={activeIndex === 0}>
                         <textarea classname="areaChange" value={description} onChange={(e) => setDescription(e.target.value)} name="description"/>
                     </Accordion.Content>
-                    <Accordion.Title
+                    {/* <Accordion.Title
                         active={activeIndex === 1}
                         index={1}
                         onClick={handleAccordion}
@@ -166,7 +214,7 @@ function SellerProduct(props) {
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 1}>
                         <p>{findSeller().bio}</p>
-                    </Accordion.Content>
+                    </Accordion.Content> */}
                     <Accordion.Title
                         active={activeIndex === 2}
                         index={2}
@@ -191,8 +239,21 @@ const mapStateToProps = (state) => {
     return {
       items: state.items.items,
       users: state.users.users,
-      images: state.images
+      images: state.images,
+      user: state.users.user,
+      item: state.items.item
     }
 }
+
+const mapDispatchToProps = dispatch => ({
+    addImage: image => dispatch(addImage(image)),
+    deleteImage: image => dispatch(deleteImage(image)),
+    updateItem: item => dispatch(updateItem(item)),
+    getItems: items => dispatch(getItems(items)),
+    getImages: images => dispatch(getItems(images)),
+    loginUser: user => dispatch(loginUser(user)),
+    selectItem: item => dispatch(selectItem(item))
+
+  });
   
-export default connect(mapStateToProps)(SellerProduct);
+export default connect(mapStateToProps, mapDispatchToProps)(SellerProduct);

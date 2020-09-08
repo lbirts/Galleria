@@ -20,10 +20,10 @@ function ItemCard(props) {
         props.users && props.images ?
         <Link to={`image/${props.item.id}`}>
             <Card>
-                <Image src={images[0].url}/>
+                <Image src={props.images.find(image => image.item.id === props.item.id).url}/>
                 <Card.Content>
                     <Card.Header>{props.item.name}</Card.Header>
-                    <Card.Meta>{props.item.discount > 0 ? `${props.item.discount}% off` : null}</Card.Meta>
+                    <Card.Meta>{props.item.buyer_id ? "SOLD" : props.item.discount > 0 ? `${props.item.discount}% off` : null}</Card.Meta>
                     <Card.Description>
                         Artist: {findSeller().name}
                     </Card.Description>

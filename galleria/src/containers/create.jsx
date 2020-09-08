@@ -1,9 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { connect } from 'react-redux';
 import './product.css';
-import { Accordion, Icon, Grid } from 'semantic-ui-react'
+import { Accordion, Icon, Grid } from 'semantic-ui-react';
+import { withRouter } from "react-router-dom";
+import { addImage, addItem, selectItem} from '../redux/actions/actions'
 
-function SellerProduct(props) {
+function Create(props) {
     const [mainImage, setMainImage] = useState({})
     const [activeIndex, setActiveIndex] = useState(0)
     const [images, setImages] = useState([])
@@ -42,8 +44,8 @@ function SellerProduct(props) {
         // files.forEach(file => console.log(file))
         for (var i = 0; i < files.length; i++) {
             console.log(files[i]);
-            setUpload([...upload, files[i]])
         }
+        setUpload([...upload, ...files])
        
     }
 
@@ -52,7 +54,8 @@ function SellerProduct(props) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accepts": "application/json"
+                "Accepts": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
             },
             body: JSON.stringify({
                 name: name,
@@ -66,6 +69,7 @@ function SellerProduct(props) {
         })
         .then(res => res.json())
         .then(neww => {
+            props.addItem(neww)
             console.log(neww)
             for (var i = 0; i < upload.length; i++) {
                 let form = new FormData()
@@ -73,12 +77,22 @@ function SellerProduct(props) {
                 form.append("item_id", neww.id)
                 fetch("http://localhost:3000/api/v1/images", {
                     method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    },
                     body: form
                 })
                 .then(res => res.json())
                 .then(newImg => {
                     setImages([...images, newImg])
-                    setMainImage(images[0])
+                    setMainImage(newImg)
+                    props.addImage(newImg)
+                    fetch("http://localhost:3000/api/v1/items/" + neww.id)
+                    .then(res => res.json())
+                    .then(select => {
+                        props.selectItem(select)
+                        props.history.push(`/image/${neww.id}`)
+                    })
                 })
             }
         })
@@ -167,8 +181,16 @@ const mapStateToProps = (state) => {
     return {
       items: state.items.items,
       user: state.users.user,
-      images: state.images
+      images: state.images,
+      users: state.users.users
     }
 }
+
+const mapDispatchToProps = dispatch => ({
+    addImage: image => dispatch(addImage(image)),
+    addItem: item => dispatch(addItem(item)),
+    selectItem: item => dispatch(selectItem(item))
+  });
   
-export default connect(mapStateToProps)(SellerProduct);
+  
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create));

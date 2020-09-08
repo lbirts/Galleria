@@ -19,7 +19,7 @@ function Nav(props) {
                 <NavLink aria-label="Profile" className="menu-link" to="/profile">
                     Profile
                 </NavLink>
-                <NavLink aria-label="Create" className="menu-link" to="/create">
+                <NavLink aria-label="Cart" className="menu-link" to="/cart">
                     <Icon name="cart"/>
                 </NavLink>
                 </div>

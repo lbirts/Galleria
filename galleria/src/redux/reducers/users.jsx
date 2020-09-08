@@ -16,7 +16,10 @@ export default function users(state=initialState, action) {
                 user: action.user
             }
         case LOGOUT_USER:
-            return initialState;
+            return {
+                ...state,
+                user: JSON.parse(localStorage.getItem("user"))
+            }
         case GET_USERS:
             return {
                 ...state,

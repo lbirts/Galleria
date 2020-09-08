@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import ItemCard from '../components/itemcard';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import {Grid} from 'semantic-ui-react';
 
 function Home(props) {
     const [searchItem, setSearchItem] = useState("")
@@ -31,15 +32,17 @@ function Home(props) {
     return (
         props.items ? 
         <div className="home">
-            <div style={{paddingBottom: "10px"}} className="ui search">
+            <div style={{paddingBottom: "50px", marginTop: "50px"}} className="ui search">
                 <div className="ui icon input">
                 <input className="prompt" velue={searchItem} onChange={searchItems}/>
                 <i className="search icon" />
                 </div>
             </div>
+            <Grid>
             {filteredItems.map(item => (
                 <ItemCard key={item.id} item={item}/>
             ))}
+            </Grid>
         </div>
         : null
     )

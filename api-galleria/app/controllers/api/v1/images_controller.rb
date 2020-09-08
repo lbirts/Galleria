@@ -1,5 +1,5 @@
 class Api::V1::ImagesController < ApplicationController
-  skip_before_action :logged_in?, only: [:index, :show, :create, :destroy, :update]
+  skip_before_action :logged_in?, only: [:index, :show]
   before_action :set_image, only: [:show, :update, :destroy]
 
   # GET /images
@@ -16,6 +16,7 @@ class Api::V1::ImagesController < ApplicationController
 
   # POST /images
   def create
+    # byebug
     url = Cloudinary::Uploader.upload(params[:image])
     @image = Image.new(image_params.merge(url: url["secure_url"], key: url["public_id"]))
     
@@ -49,6 +50,6 @@ class Api::V1::ImagesController < ApplicationController
     end
 
     def image_params
-      params.permit(:url, :item_id)
+      params.permit(:url, :item_id, :key)
     end
 end

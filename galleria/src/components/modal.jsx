@@ -25,7 +25,8 @@ function LoginModal(props) {
         const options = {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Accpets": "application/json",
             },
             body: JSON.stringify({
                 username: username,
@@ -35,12 +36,17 @@ function LoginModal(props) {
         fetch("http://localhost:3000/api/v1/login", options)
         .then(res => res.json())
         .then(userInfo => {
-            localStorage.token = userInfo.jwt
-            localStorage.setItem("user", JSON.stringify({...userInfo.user, token: userInfo.jwt}))
-            loginUser({...userInfo.user, token: userInfo.jwt})
-            setUsername("")
-            setPassword("")
-            setOpen(false)
+            if (!userInfo.error) {
+                localStorage.token = userInfo.jwt
+                localStorage.setItem("user", JSON.stringify({...userInfo.user, token: userInfo.jwt}))
+                props.loginUser({...userInfo.user, token: userInfo.jwt})
+                setUsername("")
+                setPassword("")
+                setOpen(isLoggedIn())
+                // console.log(userInfo)
+            } else {
+                setOpen(isLoggedIn())
+            }
         })
     }
 
@@ -48,24 +54,34 @@ function LoginModal(props) {
         const options = {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Accepts": "application/json"
             },
             body: JSON.stringify({
                 username: username,
                 password: password,
-                password_confirmation: passwordConfirmation
+                password_confirmation: passwordConfirmation, 
+                bio: "",
+                avatar: "",
+                email: "",
+                name: ""
             })
         }
         fetch("http://localhost:3000/api/v1/signup", options)
         .then(res => res.json())
         .then(userInfo => {
-            localStorage.token = userInfo.jwt
-            localStorage.setItem("user", JSON.stringify({...userInfo.user, token: userInfo.jwt}))
-            signupUser({...userInfo.user, token: userInfo.jwt})
-            setUsername("")
-            setPassword("")
-            setPasswordConfirmation("")
-            setSignupOpen(false)
+            if (!userInfo.error) {
+                localStorage.token = userInfo.jwt
+                localStorage.setItem("user", JSON.stringify({...userInfo.user, token: userInfo.jwt}))
+                props.signupUser({...userInfo.user, token: userInfo.jwt})
+                setUsername("")
+                setPassword("")
+                setPasswordConfirmation("")
+                setSignupOpen(false)
+                console.log(userInfo)
+            } else {
+                setSignupOpen(isLoggedIn())
+            }
         })
     }
 
@@ -96,15 +112,17 @@ function LoginModal(props) {
         >
             <Modal.Header>Login</Modal.Header>
             <Modal.Content>
-                <label for="username" style={{paddingRight: "10px"}}>Username</label>
-                <input style={{width: "300px"}} className="inputChange" name="username" value={username} onChange={(e) => setUsername(e.target.value)}/>
+            <form>
+                <label htmlFor="username" style={{paddingRight: "10px"}}>Username</label>
+                <input style={{width: "300px"}} className="inputChange" name="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)}/>
                 <br/>
                 <br/>
-                <label for="password" style={{paddingRight: "14px"}}>Password</label>
-                <input style={{width: "300px"}} className="inputChange" name="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                <label htmlFor="password" style={{paddingRight: "14px"}}>Password</label>
+                <input style={{width: "300px"}} className="inputChange" name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete/>
+            </form>
             </Modal.Content>
             <Modal.Actions>
-                <p style={{cursor: "pointer"}} onClick={clickSignup}>Don't have an account?</p>
+                <button style={{cursor: "pointer", backgroundColor: "transparent", border: "0"}} onClick={() => clickSignup()}>Don't have an account?</button>
                 <Button color="green" onClick={loginUser}>
                     <Icon name="checkmark"/> Login
                 </Button>
@@ -119,19 +137,21 @@ function LoginModal(props) {
         >
             <Modal.Header>Signup</Modal.Header>
             <Modal.Content>
-                <label for="username" style={{paddingRight: "10px"}}>Username</label>
-                <input style={{width: "300px"}} className="inputChange" name="username" value={username} onChange={(e) => setUsername(e.target.value)}/>
+            <form>
+                <label htmlFor="username" style={{paddingRight: "10px"}}>Username</label>
+                <input style={{width: "300px"}} className="inputChange" name="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)}/>
                 <br/>
                 <br/>
-                <label for="password" style={{paddingRight: "14px"}}>Password</label>
-                <input style={{width: "300px"}} className="inputChange" name="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                <label htmlFor="password" style={{paddingRight: "14px"}}>Password</label>
+                <input style={{width: "300px"}} className="inputChange" name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete/>
                 <br/>
                 <br/>
-                <label for="password_confirmation" style={{paddingRight: "14px"}}>Confirm Password</label>
-                <input style={{width: "250px"}} className="inputChange" name="password_confirmation" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)}/>
+                <label htmlFor="password_confirmation" style={{paddingRight: "14px"}}>Confirm Password</label>
+                <input style={{width: "250px"}} className="inputChange" name="password_confirmation" type="password" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} autoComplete/>
+            </form>
             </Modal.Content>
             <Modal.Actions>
-                <button style={{cursor: "pointer"}} onClick={() => clickLogin()}>Already have an account?</button>
+                <button style={{cursor: "pointer", backgroundColor: "transparent", border: "0"}} onClick={() => clickLogin()}>Already have an account?</button>
                 <Button color="green" onClick={signupUser}>
                     <Icon name="checkmark"/> Signup
                 </Button>

@@ -5,6 +5,10 @@ export const GET_USERS = "GET_USERS";
 export const GET_ITEMS = "GET_ITEMS";
 export const SELECT_ITEM = "SELECT_ITEM";
 export const GET_IMAGES = "GET_IMAGES"
+export const ADD_ITEM = "ADD_ITEM"
+export const ADD_IMAGE = "ADD_IMAGE"
+export const DELETE_IMAGE = "DELETE_IMAGE"
+export const UPDATE_ITEM = "UPDATED_ITEM"
 
 export function loginUser(user) {
     return { type: LOGIN_USER, user: user};
@@ -32,4 +36,20 @@ export function selectItem(item) {
 
 export function getImages(images) {
     return { type: GET_IMAGES, images: images }
+}
+
+export function addImage(image) {
+    return { type: ADD_IMAGE, image: image }
+}
+
+export function deleteImage(image) {
+    return { type: DELETE_IMAGE, image: image }
+}
+
+export function addItem(item) {
+    return { type: ADD_ITEM, item: item }
+}
+
+export function updateItem(item) {
+    return { type: UPDATE_ITEM, item: item }
 }

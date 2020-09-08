@@ -1,22 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Segment, Button, Form, Image } from 'semantic-ui-react'
 import ItemCard from '../components/itemcard';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
+import {loginUser, logoutUser} from '../redux/actions/actions'
 
 function Profile(props) {
-    const [myItems, setMyItems] = useState([])
     const [editting, setEditting] = useState(false)
     const [name, setName] = useState("")
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [bio, setBio] = useState("")
-    const [avatar, setAvatar] = useState("")
 
     useEffect(() => {
         if (props.items) {        
-            let mine = props.items.filter(item => item.seller_id === props.user.id)
-            setMyItems(mine)
             setName(props.user.name)
             setUsername(props.user.username)
             setEmail(props.user.email)
@@ -30,6 +27,7 @@ function Profile(props) {
             headers: {
                 "Content-Type": "application/json",
                 "Accepts": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
             },
             body: JSON.stringify({
               username: username,
@@ -41,9 +39,15 @@ function Profile(props) {
         fetch(`http://localhost:3000/api/v1/users/${props.user.id}`, options)
             .then(res => res.json())
             .then(userInfo => {
-                console.log(userInfo)
+                props.loginUser({...userInfo.user, token: userInfo.jwt})
             })
         setEditting(false)
+    }
+
+    const logout = () => {
+        localStorage.clear()
+        props.logoutUser()
+        props.history.push("/")
     }
 
     return(
@@ -55,12 +59,13 @@ function Profile(props) {
                     <h4>Username: </h4><p>{props.user.username}</p>
                     <h4>Email: </h4><p>{props.user.email}</p>
                     <h4>Bio: </h4><p>{props.user.bio}</p>
-                    <Button content="Edit User" style={{background: "#540e0f"}} onClick={() => setEditting(true)}/>
+                    <Button content="Edit User" style={{background: "#540e0f", marginBottom: "10px", color: "white"}} onClick={() => setEditting(true)}/>
+                    <Button style={{backgroundColor: "rgb(194, 4, 4)", color: "white"}} content="Logout" onClick={logout}/>
                 </Segment>
             </Grid.Column>
             <Grid.Column width="10">
                 <Segment>
-                {editting 
+                {editting && props.user 
                 ?
                 <div>
                 <Form>
@@ -76,19 +81,39 @@ function Profile(props) {
                     <label>Email</label>
                     <input name="email" value={email} type="text" onChange={(e) => setEmail(e.target.value)}/>
                 </Form.Field>
+                <Form.Field>
+                    <label>Bio</label>
+                    <textarea style={{width: "100% !important"}} name="bio" value={bio} onChange={(e) => setBio(e.target.value)}/>
+                </Form.Field>
                 </Form>
-                <Button content="Cancel" style={{background: "#540e0f"}} onClick={() => setEditting(false)}/>
-                <Button content="Submit" color="green" onClick={handleSubmit}/>
+                <Button content="Cancel" style={{background: "rgb(194, 4, 4)", color: "white", marginTop: "20px"}} onClick={() => setEditting(false)}/>
+                <Button content="Submit" style={{backgroundColor: "#540e0f", color: "white"}} onClick={handleSubmit}/>
                 </div>
                 :
+                <>
                 <div>
-                <h3>Inventory</h3>
-                {myItems.map(item => (
+                <h3 style={{marginBottom: "50px"}}>Inventory</h3>
+                <Grid>
+                {props.user.inventory.length === 0 ? <p style={{marginLeft: "auto", marginRight: "auto"}}>You haven't uploaded anything yet</p> : props.user.inventory.map(item => (
                     <ItemCard key={item.id} item={item}/>
                 ))}
+                </Grid>
                 </div>
+                <Link to="/create"><Button style={{marginTop: "50px", marginBottom: "30px", backgroundColor: "#540e0f", color: "white"}}>Create New</Button></Link>
+                <div>
+                <h3>Bought</h3>
+                <Grid>
+                {props.user.bought.length === 0 ? 
+                    <p style={{marginLeft: "auto", marginBottom: "30px", marginRight: "auto"}}>You haven't bought anything yet</p> 
+                    : 
+                    props.user.bought.map(item => (
+                        <ItemCard key={item.id} item={item}/>
+                    ))
                 }
-                <Link to="/create"><Button color="blue">Create New</Button></Link>
+                </Grid>
+                </div>
+                </>
+                }
                 </Segment>
             </Grid.Column>
         </Grid>
@@ -101,5 +126,10 @@ const mapStateToProps = (state) => {
       items: state.items.items
     }
 }
+
+const mapDispatchToProps = dispatch => ({
+    loginUser: user => dispatch(loginUser(user)),
+    logoutUser: () => dispatch(logoutUser())
+});
   
-export default connect(mapStateToProps)(Profile);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Profile));
